@@ -1,6 +1,3 @@
-//model for user created exercises
-//defautls one are found on a preexistign mongodb database
-
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
@@ -8,11 +5,16 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  description: { type: String },
-  muscleGroup: {
+  day: {
     type: String,
     require: true,
   },
+  exercises: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: 'Exercise',
+    },
+  ],
   creator: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
