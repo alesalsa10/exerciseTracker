@@ -20,6 +20,18 @@ const UserSchema = new mongoose.Schema({
       ref: 'Workout',
     },
   ],
+  height:{
+    type: Number
+  },
+  weight:{
+    type: Number
+  },
+  BMI:{
+    type: Number
+  },
+  fat:{
+    type: Number
+  }
 });
 
 module.exports = mongoose.model('User', UserSchema);

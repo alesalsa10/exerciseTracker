@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator');
-var createError = require('http-errors');
 const bcrypt = require('bcrypt');
 
 
@@ -26,7 +25,7 @@ router.post(
 
         //if user exists return error
         if(user){
-            return createError(400, 'User already exists')
+            return res.status(400).json({ err: 'User already exists' });
         }
 
         //create user
@@ -45,7 +44,7 @@ router.post(
 
       }catch(error){
         console.log(error);
-        return createError(500, 'Something went wrong')
+        return res.status(500).json({ err: 'Something went wrong' });
       }
   }
 );

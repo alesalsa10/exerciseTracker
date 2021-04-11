@@ -1,15 +1,14 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-var createError = require('http-errors');
 
 
 module.exports = function (req, res, next) {
   //Get Token from the header
-  const token = req.header('authorization');
+  const token = req.header('Authorization');
 
   //check if not token
   if (!token) {
-    return createError(401, 'Authorization defined');
+    return res.status(401).json({ err: 'Invalid credentials' });
   }
 
   //Verify token
@@ -19,6 +18,6 @@ module.exports = function (req, res, next) {
     req.user = decoded.user;
     next();
   } catch (err) {
-    return createError(401, 'Invalid token')
+    return res.status(500).json({ err: 'Invalid token' });
   }
 };

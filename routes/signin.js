@@ -3,7 +3,6 @@ require('dotenv').config();
 const router = express.Router();
 var jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
-var createError = require('http-errors');
 const bcrypt = require('bcrypt');
 
 const User = require('../models/User');
@@ -24,7 +23,7 @@ router.post(
 
       //if no user is found return error
       if (!user) {
-        return createError(401, 'Invalid credentials');
+        return res.status(401).json({ err: 'Invalid credentials' });
       }
 
       //compare password
@@ -32,16 +31,16 @@ router.post(
 
       //return error if passwords do not match
       if (!isPasswordMatch) {
-        return createError(401, 'Invalid credentials');
+        return res.status(401).json({ err: 'Invalid credentials' });
       }
 
       //return jwt token
-      return res.json({ token: jwt.sign({ id: user.id }, process.env.SECRET) });
+      return res.json({ token: jwt.sign({ id: user.id }, process.env.SECRET), id: user._id });
 
 
     } catch (error) {
       console.log(error);
-      return createError(500, 'Something went wrong');
+      return res.status(500).json({ err: 'Something went wrong' });
     }
   }
 );

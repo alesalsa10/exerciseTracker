@@ -17,9 +17,13 @@ connectToDb()
 app.get('/', function (req, res) {
   res.send('Hello World');
 });
+
+// auth routes
 app.use('/register', require('./routes/register'))
 app.use('/signin', require('./routes/signin'));
 
+//profile routes
+app.use('/profile', require('./routes/profile'))
 
 
 app.listen(port, () => {
