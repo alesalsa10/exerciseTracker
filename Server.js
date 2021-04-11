@@ -4,8 +4,11 @@ require('dotenv').config();
 const cors = require('cors')
 
 const app = express();
+
+app.use(cors());
 app.use(express.json())
-app.use(cors);
+
+
 const port = process.env.PORT || 5000;
 
 connectToDb()
@@ -15,7 +18,7 @@ app.get('/', function (req, res) {
   res.send('Hello World');
 });
 app.use('/register', require('./routes/register'))
-
+app.use('/signin', require('./routes/signin'));
 
 
 

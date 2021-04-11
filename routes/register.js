@@ -41,6 +41,8 @@ router.post(
         //save user
         await user.save()
 
+        res.json('User created')
+
       }catch(error){
         console.log(error);
         return createError(500, 'Something went wrong')
