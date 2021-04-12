@@ -6,7 +6,6 @@ const auth = require('../middlewares/auth');
 const mongoose = require('mongoose');
 
 const User = require('../models/User');
-const { findByIdAndUpdate } = require('../models/User');
 
 //get an user
 router.get('/:id', auth, async (req, res) => {
@@ -35,33 +34,42 @@ router.put(
   '/:id',
   auth,
   check('heightFeet')
-    .isNumeric()
-    .withMessage('Height must be a number')
-    .isLength({ min: 1, max: 10 }),
+    .optional({ nullable: true, checkFalsy: true })
+    .isInt({ min: 1, max: 10 })
+    .withMessage('Height must be between 1 and 10 feet tall'),
   check('heightInches')
-    .isNumeric()
-    .withMessage('Height must be a number')
-    .isLength({ min: 0, max: 11 })
+    .optional({ nullable: true, checkFalsy: true })
+    .isInt({ min: 0, max: 11 })
     .withMessage('Inches must be between 0 and 11'),
-  check('weight').isNumeric().withMessage('Weight must be a number'),
+  check('weight')
+    .isInt({ min: 1 })
+    .withMessage('Weight must be a number')
+    .optional({ nullable: true, checkFalsy: true }),
   check('fat')
-    .isNumeric()
-    .withMessage('Fat must be a number')
-    .isLength({ min: 1, max: 100 }).withMessage('You cannot have more than 100% fat'),
+    .optional({ nullable: true, checkFalsy: true })
+    .isInt({ min: 1, max: 100 })
+    .withMessage('Fat must be between 1 and 100'),
   async (req, res) => {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
       let id = req.params.id;
 
       const { heightFeet, heightInches, weight, fat } = req.body;
 
-      
+      let payloadObject = {
+        heightFeet,
+        heightInches,
+        weight,
+        fat,
+        BMI: (703 * weight) / Math.pow(heightFeet * 12 + heightInches, 2),
+      };
 
       await User.findByIdAndUpdate(
         id,
-        //{ weight },
-        {heightFeet},
-        //{heightInches},
-        //{fat},
+        payloadObject,
         { new: true },
         (err, result) => {
           if (err) {
@@ -82,5 +90,19 @@ router.put(
     }
   }
 );
+
+//delete profile
+router.delete('/:id', auth, async (req, res) => {
+  try {
+    let id = req.params.id;
+    await User.findByIdAndDelete(id);
+
+    res.status(200).json('User deleted')
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json('Something went wrong');
+  }
+});
 
 module.exports = router;
