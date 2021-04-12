@@ -20,18 +20,37 @@ const UserSchema = new mongoose.Schema({
       ref: 'Workout',
     },
   ],
-  height:{
-    type: Number
+  heightFeet: {
+    type: Number,
+    require: true,
+    default: 1,
+    min: 1,
+    max: 10
   },
-  weight:{
-    type: Number
+  heightInches: {
+    type: Number,
+    require: true,
+    default: 0,
+    max: 11
   },
-  BMI:{
-    type: Number
+  weight: {
+    type: Number,
+    require: true,
+    default: 1,
+    min: 1,
   },
-  fat:{
-    type: Number
-  }
+  BMI: {
+    type: Number,
+    require: true,
+    default: 1,
+  },
+  fat: {
+    type: Number,
+    require: true,
+    default: 1,
+    min: 1,
+    max: 100
+  },
 });
 
 module.exports = mongoose.model('User', UserSchema);
