@@ -43,6 +43,10 @@ router.post(
         return res.status(401).json({ err: 'Invalid credentials' });
       }
 
+      if(!user.verified){
+        return res.status(401).json({err: 'Account not verified'})
+      }
+
       //compare password
       const isPasswordMatch = await bcrypt.compare(password, user.password);
 

@@ -14,6 +14,14 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  verified:{
+    type: Boolean,
+    default: false
+  },
+  confirmationCode: {
+    type:String,
+    require: true
+  },
   workouts: [
     {
       type: mongoose.Types.ObjectId,

@@ -25,6 +25,9 @@ app.use('/signin', require('./routes/signin'));
 //profile routes
 app.use('/profile', require('./routes/profile'))
 
+//verify eamil
+app.use('/verify', require('./routes/verifyEmail'))
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port} `);
